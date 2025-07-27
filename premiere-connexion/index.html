@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Première Connexion - Demande d'Accès</title>
+    <link rel="stylesheet" href="/static/css/premiere-connexion.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-box">
+            <div class="register-header">
+                <img src="/static/img/logo.png" alt="Logo" class="logo">
+                <h2>Demande d'Accès Intranet</h2>
+                <p>Veuillez remplir ce formulaire pour soumettre votre demande d'accès.</p>
+            </div>
+            <form id="registerForm" action="/api/v1/premiere-connexion-api/index.php" method="POST">
+                <div class="input-group">
+                    <i class="fas fa-user icon"></i>
+                    <input type="text" id="nom" name="nom" placeholder="Nom" required autocomplete="family-name">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-user icon"></i>
+                    <input type="text" id="prenom" name="prenom" placeholder="Prénom" required autocomplete="given-name">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-id-card icon"></i>
+                    <input type="text" id="matricule" name="matricule" placeholder="Votre Matricule (ex: PN-XXXX)" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-building icon"></i>
+                    <input type="text" id="service" name="service" placeholder="Service (ex: Police Nationale)" value="A Définir" autocomplete="organization">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope icon"></i>
+                    <input type="email" id="email" name="email" placeholder="Adresse email professionnelle" required autocomplete="email">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock icon"></i>
+                    <input type="password" id="password" name="password" placeholder="Mot de passe" required autocomplete="new-password">
+                    <span class="toggle-password" onclick="togglePasswordVisibility()"><i class="fas fa-eye-slash"></i></span>
+                </div>
+                 <div class="input-group">
+                    <i class="fas fa-lock icon"></i>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmer le mot de passe" required autocomplete="new-password">
+                    <span class="toggle-password" onclick="togglePasswordVisibilityConfirm()"><i class="fas fa-eye-slash"></i></span>
+                </div>
+                <div class="form-options">
+                    <label class="terms-conditions">
+                        <input type="checkbox" id="acceptTerms" required> J'accepte les <a href="/mentions-legales" target="_blank">mentions légales</a> et la <a href="/politique-de-confidentialite" target="_blank">politique de confidentialité</a>.
+                    </label>
+                </div>
+                <button type="submit" class="register-button">Soumettre la Demande <i class="fas fa-paper-plane"></i></button>
+            </form>
+            <div class="register-footer">
+                <p>Vous avez déjà un compte ? <a href="/se-connecter" class="login-link">Se Connecter</a></p>
+            </div>
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/premiere-connexion.js"></script>
+</body>
+</html>
