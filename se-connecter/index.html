@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="/static/css/se-connecter.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <img src="/static/img/logo.png" alt="Logo" class="logo">
+                <h2>Accès Intranet FDO</h2>
+            </div>
+            <form id="loginForm" action="/api/v1/se-connecter-api/index.php" method="POST">
+                <div class="input-group">
+                    <i class="fas fa-envelope icon"></i>
+                    <input type="email" id="email" name="email" placeholder="Adresse email professionnelle" required autocomplete="email">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock icon"></i>
+                    <input type="password" id="password" name="password" placeholder="Mot de passe" required autocomplete="current-password">
+                    <span class="toggle-password" onclick="togglePasswordVisibility()"><i class="fas fa-eye-slash"></i></span>
+                </div>
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember_me"> Se souvenir de moi
+                    </label>
+                    <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+                </div>
+                <button type="submit" class="login-button">Se Connecter <i class="fas fa-arrow-right"></i></button>
+            </form>
+            <div class="login-footer">
+                <p>Pas encore de compte ? <a href="/premiere-connexion" class="register-link">Première connexion</a></p>
+            </div>
+            <div id="errorMessage" class="error-message"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/se-connecter.js"></script>
+</body>
+</html>

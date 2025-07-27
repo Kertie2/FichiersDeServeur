@@ -1,0 +1,13 @@
+Options -Indexes
+
+RewriteEngine On
+
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sql|bak|yml|json)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+RewriteRule ^api/docs/.*$ - [F,L]
+
+RewriteRule ^api/v1/config/.*\.php$ - [F,L]
+

@@ -1,0 +1,16 @@
+/* /static/css/variables.css */
+
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --dark-bg: #1a1a2e;
+    --card-bg: #2a2a4a;
+    --text-color: #e0e0e0;
+    --input-bg: #3c3c64;
+    --input-border: #4a4a7a;
+    --button-bg: #007bff;
+    --button-hover-bg: #0056b3;
+    --error-color: #ff4d4f;
+    --link-color: #8ab4f8;
+    --animation-speed: 0.3s;
+}
