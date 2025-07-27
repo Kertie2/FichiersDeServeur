@@ -28,14 +28,34 @@
                     <label class="remember-me">
                         <input type="checkbox" name="remember_me"> Se souvenir de moi
                     </label>
-                    <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+                    <a href="#" class="forgot-password" id="forgotPasswordLink">Mot de passe oublié ?</a>
                 </div>
                 <button type="submit" class="login-button">Se Connecter <i class="fas fa-arrow-right"></i></button>
             </form>
             <div class="login-footer">
-                <p>Pas encore de compte ? <a href="/premiere-connexion" class="register-link">Première connexion</a></p>
+                <p>Pas encore de compte ? <a href="/premiere-connexion" class="register-link">Premiere connexion</a></p>
             </div>
             <div id="errorMessage" class="error-message"></div>
+        </div>
+    </div>
+
+    <div id="forgotPasswordModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" id="closeModalButton">&times;</button>
+            <h3>Réinitialiser le mot de passe</h3>
+            <p>Veuillez entrer votre adresse email et votre matricule pour réinitialiser votre mot de passe.</p>
+            <form id="forgotPasswordForm" action="/api/v1/reset-password-api/index.php" method="POST">
+                <div class="input-group">
+                    <i class="fas fa-envelope icon"></i>
+                    <input type="email" id="resetEmail" name="email" placeholder="Adresse email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-id-card icon"></i>
+                    <input type="text" id="resetMatricule" name="matricule" placeholder="Votre Matricule" required>
+                </div>
+                <button type="submit" class="login-button modal-button">Envoyer la demande <i class="fas fa-paper-plane"></i></button>
+            </form>
+            <div id="modalMessage" class="modal-message"></div>
         </div>
     </div>
 

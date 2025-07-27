@@ -9,5 +9,3 @@ RewriteEngine On
 
 RewriteRule ^api/docs/.*$ - [F,L]
 
-RewriteRule ^api/v1/config/.*\.php$ - [F,L]
-

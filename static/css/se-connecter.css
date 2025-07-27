@@ -17,7 +17,7 @@ body {
     background: url('/static/img/background.png') no-repeat center center fixed;
     background-size: cover;
     color: var(--text-color);
-    overflow: hidden;
+    overflow: hidden; /* Empêche le défilement de la page quand la modale est ouverte */
     position: relative;
 }
 
@@ -93,8 +93,7 @@ body::before {
 .input-group {
     position: relative;
     margin-bottom: 25px;
-    /* Aucun border ici, il sera sur l'input directement */
-    padding: 0; /* Garder padding 0 */
+    padding: 0;
 }
 
 .input-group .icon {
@@ -104,22 +103,22 @@ body::before {
     transform: translateY(-50%);
     color: var(--secondary-color);
     font-size: 1.1em;
-    z-index: 1; /* S'assurer qu'il est au-dessus du champ */
+    z-index: 1;
 }
 
 .input-group input {
-    width: calc(100% - 60px); /* Ajuster la largeur pour l'icône et le padding */
-    padding: 15px 15px 15px 50px; /* Padding à gauche pour l'icône */
+    width: calc(100% - 60px);
+    padding: 15px 15px 15px 50px;
     background-color: var(--input-bg);
-    border: 1px solid var(--input-border); /* Bordure standard */
-    border-radius: 8px; /* Coins arrondis standard */
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
     color: var(--text-color);
     font-size: 1em;
     outline: none;
     transition: border-color var(--animation-speed), box-shadow var(--animation-speed);
 }
 
-.input-group input::placeholder { /* Style du placeholder natif */
+.input-group input::placeholder {
     color: rgba(224, 224, 224, 0.6);
 }
 
@@ -137,22 +136,19 @@ body::before {
     cursor: pointer;
     font-size: 1.1em;
     transition: color var(--animation-speed);
-    z-index: 1; /* Au-dessus du champ */
+    z-index: 1;
 }
 
 .toggle-password:hover {
     color: var(--primary-color);
 }
 
-/* Règle pour toujours afficher l'icône fa-eye-slash et masquer fa-eye */
-/* On garde le !important pour s'assurer que ça ne bouge pas */
 .toggle-password .fa-eye {
     display: none !important;
 }
 .toggle-password .fa-eye-slash {
     display: inline-block !important;
 }
-
 
 .form-options {
     display: flex;
@@ -254,45 +250,111 @@ body::before {
     color: var(--primary-color);
 }
 
-.social-login {
-    margin-top: 25px;
-    border-top: 1px solid var(--input-border);
-    padding-top: 25px;
-}
-
-.social-login p {
-    margin-bottom: 15px;
-    color: var(--secondary-color);
-}
-
-.social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.social-icon {
-    display: inline-flex;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background-color: var(--input-bg);
-    color: var(--text-color);
+/* Styles pour la modale "Mot de passe oublié" */
+.modal-overlay {
+    position: fixed; /* Essentiel pour couvrir toute la fenêtre */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Overlay plus sombre pour la modale */
+    display: flex; /* Utiliser flex pour centrer le contenu */
     justify-content: center;
     align-items: center;
-    font-size: 1.3em;
-    text-decoration: none;
-    transition: background-color var(--animation-speed), transform var(--animation-speed), box-shadow var(--animation-speed);
+    z-index: 1000; /* Assurez-vous que la modale est au-dessus de tout */
+
+    /* Masqué par défaut de manière robuste */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* Empêche les clics à travers quand masqué */
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
 }
 
-.social-icon.discord { background-color: #5865F2; }
-.social-icon.google { background-color: #DB4437; }
-
-.social-icon:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all; /* Autorise les interactions quand actif */
 }
 
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    width: 100%;
+    max-width: 400px; /* Taille de la modale */
+    box-sizing: border-box;
+    position: relative; /* Pour positionner le bouton de fermeture */
+    transform: scale(0.9); /* Animation d'apparition */
+    transition: transform 0.3s ease-out;
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-content h3 {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    color: var(--text-color);
+    margin-bottom: 25px;
+    font-size: 0.95em;
+}
+
+.modal-content .input-group {
+    margin-bottom: 20px; /* Espacement dans la modale */
+}
+
+.modal-content .login-button.modal-button {
+    margin-top: 20px;
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2em;
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: color var(--animation-speed);
+}
+
+.close-button:hover {
+    color: var(--primary-color);
+}
+
+.modal-message {
+    font-size: 0.9em;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    display: none; /* Caché par défaut */
+    opacity: 0;
+    animation: fadeErrorIn 0.5s forwards; /* Réutiliser l'animation existante */
+}
+/* Styles pour les messages de succès/erreur dans la modale */
+.modal-message.error {
+    color: var(--error-color);
+    background-color: rgba(255, 77, 79, 0.1);
+    border: 1px solid var(--error-color);
+}
+
+.modal-message.success {
+    color: #4CAF50; /* Un vert pour le succès */
+    background-color: rgba(76, 175, 80, 0.1);
+    border: 1px solid #4CAF50;
+}
+
+
+/* Messages d'erreur génériques de la page */
 .error-message {
     color: var(--error-color);
     font-size: 0.9em;
@@ -324,5 +386,10 @@ body::before {
 
     .input-group input {
         padding: 12px 12px 12px 45px;
+    }
+
+    .modal-content {
+        margin: 20px;
+        padding: 25px;
     }
 }

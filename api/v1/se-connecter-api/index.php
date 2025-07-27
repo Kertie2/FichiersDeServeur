@@ -9,7 +9,7 @@ header('Content-Type: application/json');
 session_start();
 
 // Inclure le fichier de configuration de la base de données
-$config = require_once '../../config/database.php';
+$config = require_once '../config/database.php';
 
 // Fonction pour envoyer une réponse JSON
 function sendJsonResponse($success, $message, $data = []) {
