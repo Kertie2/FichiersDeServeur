@@ -1,0 +1,237 @@
+/* /static/css/attentes.css */
+
+/* Importation des variables globales */
+@import url('/static/css/variables.css');
+
+/* Styles spécifiques à la liste des comptes en attente */
+.pending-accounts-list {
+    margin-bottom: 30px;
+    padding: 25px;
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.pending-accounts-list h3 {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--input-border);
+    padding-bottom: 10px;
+}
+
+.pending-accounts-list .section-description {
+    color: var(--secondary-color);
+    font-size: 0.95em;
+    margin-bottom: 25px;
+}
+
+.no-pending-users {
+    text-align: center;
+    padding: 50px;
+    color: var(--secondary-color);
+    font-size: 1.1em;
+}
+
+.no-pending-users i {
+    font-size: 3em;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid var(--input-border);
+    padding: 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #2e2e52; /* Lighter variant of card-bg */
+}
+
+tbody tr:hover {
+    background-color: #38386c; /* Even lighter hover */
+}
+
+.view-details-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+.view-details-button:hover {
+    background-color: var(--button-hover-bg);
+}
+
+/* Styles pour la modale (copié et adapté de se-connecter.css) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    width: 100%;
+    max-width: 600px; /* Plus large pour les détails */
+    box-sizing: border-box;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s ease-out;
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-content h3 {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.modal-content .modal-body-content {
+    text-align: left; /* Aligner le contenu des détails à gauche */
+    color: var(--text-color);
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Une seule colonne par défaut */
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-left: 10px;
+}
+.detail-grid .detail-item {
+    padding: 10px;
+    background-color: var(--input-bg);
+    border-radius: 5px;
+    border: 1px solid var(--input-border);
+}
+.detail-grid strong {
+    color: var(--primary-color);
+    margin-right: 5px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.action-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.action-button.validate-button {
+    background-color: #4CAF50; /* Vert pour Valider */
+    color: white;
+}
+.action-button.validate-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.action-button.reject-button {
+    background-color: #f44336; /* Rouge pour Refuser */
+    color: white;
+}
+.action-button.reject-button:hover {
+    background-color: #d32f2f;
+    transform: translateY(-2px);
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2em;
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: color var(--animation-speed);
+}
+
+.close-button:hover {
+    color: var(--primary-color);
+}
+
+.modal-message {
+    font-size: 0.9em;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    opacity: 0;
+    animation: fadeErrorIn 0.5s forwards;
+}
+.modal-message.error {
+    color: var(--error-color);
+    background-color: rgba(255, 77, 79, 0.1);
+    border: 1px solid var(--error-color);
+}
+.modal-message.success {
+    color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+    border: 1px solid #4CAF50;
+}
+
+/* Responsive adjustments for modal */
+@media (max-width: 768px) {
+    .modal-content {
+        max-width: 90%;
+        margin: 10px;
+    }
+    .detail-grid {
+        grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+    }
+}

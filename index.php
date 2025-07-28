@@ -78,8 +78,10 @@ switch ($requestUri) {
         break;
     // ... Ajoutez d'autres cas pour vos nouvelles pages : attentes, signalements, administration ...
     case '/attentes':
-        $viewFile = __DIR__ . '/views/attentes.php'; // A créer
+        $viewFile = __DIR__ . '/views/attentes.php';
         $pageTitle = 'Comptes en Attente';
+        $pageCss = '/static/css/attentes.css';
+        $pageJs = '/static/js/attentes.js';
         $activeNav = 'Attentes';
         // Vérification de rôle pour l'accès à la page (sécurité supplémentaire)
         if ($user['role'] !== 'Superviseur' && $user['role'] !== 'Admin') {
@@ -91,7 +93,7 @@ switch ($requestUri) {
         $viewFile = __DIR__ . '/views/signalements.php'; // A créer
         $pageTitle = 'Signalements';
         $activeNav = 'Signalements';
-        if ($user['role'] !== 'Superviseur' && $user['role'] !== 'Admin') {
+        if ($user['role'] !== 'Admin') {
             header('Location: /');
             exit();
         }
