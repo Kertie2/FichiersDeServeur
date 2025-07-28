@@ -1,0 +1,291 @@
+/* /static/css/index.css */
+
+/* Importation des variables globales */
+@import url('/static/css/variables.css');
+
+/* Importation d'une police Google Fonts pour un look moderne */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('/static/img/background.png') no-repeat center center fixed;
+    background-size: cover;
+    color: var(--text-color);
+    overflow: hidden; /* Empêche le scroll de la page si le contenu dépasse */
+    position: relative;
+    min-height: 100vh;
+    display: flex; /* Utilisation de flexbox pour la mise en page principale */
+}
+
+/* Overlay pour assombrir l'image de fond et améliorer le contraste */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+.main-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    width: 100%;
+    height: 100vh; /* Prend toute la hauteur de la fenêtre */
+    background-color: rgba(var(--dark-bg), 0.8); /* Fond du conteneur principal semi-transparent */
+    border-radius: 12px;
+    margin: 20px;
+    overflow: hidden; /* Pour que le contenu ne déborde pas du conteneur arrondi */
+}
+
+/* Styles de la barre latérale */
+.sidebar {
+    width: 250px;
+    background-color: var(--card-bg); /* Couleur de la carte pour la sidebar */
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease;
+}
+
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+}
+
+.sidebar-header h3 {
+    color: var(--text-color);
+    font-size: 1.4em;
+    margin: 0;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li {
+    margin-bottom: 10px;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar-nav a i {
+    margin-right: 10px;
+    font-size: 1.1em;
+}
+
+.sidebar-nav a:hover, .sidebar-nav li.active a {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Styles du contenu principal */
+.content-area {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.2); /* Un léger fond pour le contenu */
+    overflow-y: auto; /* Permet le défilement si le contenu dépasse */
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--input-border);
+}
+
+.content-header h2 {
+    color: var(--primary-color);
+    font-size: 2em;
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info {
+    color: var(--secondary-color);
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.notification-icon {
+    font-size: 1.5em;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.notification-icon:hover {
+    color: var(--primary-color);
+}
+
+.main-content {
+    padding-right: 15px; /* Pour éviter que la barre de défilement ne cache le contenu */
+}
+
+.main-content section {
+    background-color: var(--card-bg);
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.main-content section h3 {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--input-border);
+    padding-bottom: 10px;
+}
+
+/* User Overview */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.info-item {
+    background-color: var(--input-bg); /* Couleur pour les items d'info */
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid var(--input-border);
+}
+
+.info-item .icon {
+    font-size: 1.8em;
+    color: var(--primary-color);
+}
+
+.info-item .label {
+    font-size: 0.9em;
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.info-item .value {
+    font-size: 1em;
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+/* Quick Access */
+.access-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.access-card {
+    background-color: var(--input-bg);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.access-card i {
+    font-size: 2.5em;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.access-card span {
+    display: block;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.access-card:hover {
+    transform: translateY(-5px);
+    background-color: #38386c; /* Légèrement plus clair au hover */
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        margin: 0;
+        border-radius: 0;
+    }
+    .sidebar {
+        width: 100%;
+        padding: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    .sidebar-nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    .sidebar-nav li {
+        margin-bottom: 0;
+    }
+    .sidebar-nav a {
+        padding: 8px 10px;
+        font-size: 0.9em;
+    }
+    .sidebar-nav a i {
+        margin-right: 5px;
+    }
+    .content-area {
+        padding: 20px;
+    }
+    .content-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+    .header-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    .info-grid, .access-grid {
+        grid-template-columns: 1fr;
+    }
+}
