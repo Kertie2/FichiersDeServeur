@@ -1,3 +1,7 @@
+/* /static/css/profil.css */
+
+/* Importer les variables et les styles généraux de index.css si ce fichier est chargé après index.css */
+
 .profile-details, .password-change {
     margin-bottom: 30px;
     padding: 25px;
@@ -22,14 +26,17 @@
 }
 
 .profile-details form .input-group, .password-change form .input-group {
-    position: relative; /* S'assurer que le parent de l'icône est positionné */
+    position: relative;
     margin-bottom: 20px;
 }
 
-/* Styles pour les champs d'entrée (input) */
-.profile-details input, .password-change input {
-    width: calc(100% - 60px); /* Ajustement pour icône et padding */
-    padding: 15px 15px 15px 50px; /* IMPORTANT : Assurer le padding à gauche pour l'icône */
+/* Styles pour input ET select */
+.profile-details input,
+.profile-details select, /* Cible le select pour les styles généraux */
+.password-change input,
+.password-change select { /* Assure que les select de la section password-change sont aussi ciblés */
+    width: 100%; /* TRÈS IMPORTANT : La largeur fait 100% du parent */
+    padding: 15px 15px 15px 50px; /* Padding standard pour l'icône à gauche */
     background-color: var(--input-bg);
     border: 1px solid var(--input-border);
     border-radius: 8px;
@@ -37,33 +44,43 @@
     font-size: 1em;
     outline: none;
     transition: border-color var(--animation-speed), box-shadow var(--animation-speed);
-    z-index: 0; /* Assurez-vous que l'input est en dessous des icônes */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box; /* TRÈS IMPORTANT : Inclut padding et border dans la largeur */
+}
+
+/* Flèche personnalisée pour le select (sur profil aussi) */
+.profile-details select,
+.password-change select { /* Cible spécifiquement le select pour la flèche */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0e0e0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 40px; /* Ce padding-right s'ajoute au padding-right de la règle générale */
 }
 
 .profile-details input::placeholder, .password-change input::placeholder {
     color: rgba(224, 224, 224, 0.6);
 }
 
-.profile-details input:focus, .password-change input:focus {
+.profile-details input:focus,
+.profile-details select:focus,
+.password-change input:focus,
+.password-change select:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
 }
 
-/* Styles pour les icônes à l'intérieur des input-group */
 .profile-details .input-group .icon, .password-change .input-group .icon {
     position: absolute;
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--secondary-color); /* Couleur standard des icônes */
+    color: var(--secondary-color);
     font-size: 1.1em;
-    z-index: 1; /* L'icône doit être au-dessus de l'input */
-    /* DEBUG TEMPORAIRE : pour voir si l'icône est là */
-    /* background-color: rgba(255, 0, 0, 0.5); */ /* Rendre le fond rouge semi-transparent */
-    /* border: 1px solid yellow; */ /* Ajouter une bordure jaune */
+    z-index: 1;
 }
 
-/* Styles pour les toggles de mot de passe (icône œil) */
 .profile-details .toggle-password, .password-change .toggle-password {
     position: absolute;
     right: 15px;
@@ -73,7 +90,7 @@
     cursor: pointer;
     font-size: 1.1em;
     transition: color var(--animation-speed);
-    z-index: 1; /* Aussi au-dessus de l'input */
+    z-index: 1;
 }
 .profile-details .toggle-password:hover, .password-change .toggle-password:hover {
     color: var(--primary-color);
@@ -120,9 +137,8 @@
     margin-bottom: 10px;
     display: block;
     text-align: left;
-    padding-left: 50px; /* Aligné avec le texte de l'input */
+    padding-left: 50px;
 }
-
 
 /* Messages (succès/erreur) pour le profil */
 .profile-message, .password-message {
@@ -130,9 +146,9 @@
     margin-bottom: 20px;
     padding: 10px;
     border-radius: 5px;
-    display: none; /* Caché par défaut */
+    display: none;
     opacity: 0;
-    animation: fadeErrorIn 0.5s forwards; /* Réutiliser l'animation d'apparition */
+    animation: fadeErrorIn 0.5s forwards;
 }
 .profile-message.error, .password-message.error {
     color: var(--error-color);

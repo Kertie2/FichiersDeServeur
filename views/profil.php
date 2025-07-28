@@ -7,20 +7,13 @@
 $message = null;
 $error = null;
 
-// Gérer la soumission du formulaire de mise à jour de profil
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_profile') {
-    // Les données seront envoyées via Fetch API vers /api/v1/profile-update-api/index.php
-    // Ce bloc est ici juste pour indiquer qu'une action POST sur cette page pourrait être gérée
-    // mais le JS enverra vers l'API, donc ce bloc n'est pas strictement nécessaire pour la logique API
-}
-
 // Les données de l'utilisateur sont déjà dans $user, récupérées par index.php
 // Pour l'édition, on peut pré-remplir les champs
 $userEmail = htmlspecialchars($user['email']);
 $userNom = htmlspecialchars($user['nom']);
 $userPrenom = htmlspecialchars($user['prenom']);
 $userMatricule = htmlspecialchars($user['matricule']);
-$userService = htmlspecialchars($user['service']);
+$userService = htmlspecialchars($user['service']); // L'actuel service de l'utilisateur
 ?>
 
 <section class="profile-details">
@@ -51,7 +44,9 @@ $userService = htmlspecialchars($user['service']);
         </div>
         <div class="input-group">
             <i class="fas fa-building icon"></i>
-            <input type="text" id="profileService" name="service" placeholder="Service" value="<?php echo $userService; ?>" required>
+            <select id="profileService" name="service" required data-current-service="<?php echo htmlspecialchars($user['service']); ?>">
+                <option value="">Chargement des services...</option>
+                </select>
         </div>
         
         <button type="submit" class="profile-update-button">Mettre à jour le profil <i class="fas fa-save"></i></button>

@@ -11,7 +11,7 @@
     <div class="register-container">
         <div class="register-box">
             <div class="register-header">
-                <img src="/static/img/logo.png" alt="Logo" class="logo">
+                <img src="/static/img/logo.png" alt="Logo Police" class="logo">
                 <h2>Demande d'Accès Intranet</h2>
                 <p>Veuillez remplir ce formulaire pour soumettre votre demande d'accès.</p>
             </div>
@@ -30,7 +30,9 @@
                 </div>
                 <div class="input-group">
                     <i class="fas fa-building icon"></i>
-                    <input type="text" id="service" name="service" placeholder="Service (ex: Police Nationale)" value="A Définir" autocomplete="organization">
+                    <select id="service" name="service" required>
+                        <option value="">Sélectionnez votre service</option>
+                        </select>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-envelope icon"></i>

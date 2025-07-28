@@ -4,10 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirmPassword');
     const acceptTermsCheckbox = document.getElementById('acceptTerms');
+    const serviceSelect = document.getElementById('service'); // Le nouveau sélecteur de service
     const errorMessageDiv = document.getElementById('errorMessage');
     const successMessageDiv = document.getElementById('successMessage');
 
-    // --- Fonctions pour afficher/masquer les mots de passe (deux champs) ---
+    // --- Fonction pour afficher/masquer les mots de passe (deux champs) ---
     window.togglePasswordVisibility = function() {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
@@ -18,17 +19,27 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmPasswordInput.setAttribute('type', type);
     };
 
-    // --- Fonction pour afficher un message d'erreur ---
-    function showErrorMessage(message) {
-        successMessageDiv.style.display = 'none'; // Cacher le succès
-        errorMessageDiv.textContent = message;
-        errorMessageDiv.style.display = 'block';
-        errorMessageDiv.style.opacity = '0';
-        void errorMessageDiv.offsetWidth; // Force le reflow pour que l'animation se rejoue
-        errorMessageDiv.style.opacity = '1';
+    // --- Fonctions pour gérer les messages ---
+    function showMessage(message, type = 'error') {
+        if (type === 'success') {
+            successMessageDiv.textContent = message;
+            successMessageDiv.className = 'success-message';
+            successMessageDiv.style.display = 'block';
+            successMessageDiv.style.opacity = '0';
+            void successMessageDiv.offsetWidth;
+            successMessageDiv.style.opacity = '1';
+            errorMessageDiv.style.display = 'none';
+        } else {
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.className = 'error-message';
+            errorMessageDiv.style.display = 'block';
+            errorMessageDiv.style.opacity = '0';
+            void errorMessageDiv.offsetWidth;
+            errorMessageDiv.style.opacity = '1';
+            successMessageDiv.style.display = 'none';
+        }
     }
 
-    // --- Fonction pour masquer les messages d'erreur ---
     function hideMessages() {
         errorMessageDiv.style.display = 'none';
         errorMessageDiv.textContent = '';
@@ -36,59 +47,84 @@ document.addEventListener('DOMContentLoaded', () => {
         successMessageDiv.textContent = '';
     }
 
-    // --- Fonction pour afficher un message de succès ---
-    function showSuccessMessage(message) {
-        errorMessageDiv.style.display = 'none'; // Cacher l'erreur
-        successMessageDiv.textContent = message;
-        successMessageDiv.style.display = 'block';
-        successMessageDiv.style.opacity = '0';
-        void successMessageDiv.offsetWidth;
-        successMessageDiv.style.opacity = '1';
+    // --- Fonction pour charger les services depuis l'API ---
+    async function loadServices() {
+        try {
+            const response = await fetch('/api/v1/services-list-api/index.php');
+            const data = await response.json();
+
+            if (response.ok && data.success && data.services) {
+                // Vider les options existantes sauf la première ("Sélectionnez...")
+                serviceSelect.innerHTML = '<option value="">Sélectionnez votre service</option>';
+                data.services.forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service;
+                    option.textContent = service;
+                    serviceSelect.appendChild(option);
+                });
+            } else {
+                showMessage(data.message || 'Impossible de charger la liste des services. Veuillez réessayer.', 'error');
+                // Optionnel: désactiver le sélecteur si les services ne peuvent pas être chargés
+                serviceSelect.disabled = true;
+            }
+        } catch (error) {
+            console.error('Erreur réseau lors du chargement des services:', error);
+            showMessage('Erreur réseau lors du chargement des services. Veuillez vérifier votre connexion.', 'error');
+            serviceSelect.disabled = true;
+        }
+    }
+
+    // Charger les services au chargement de la page
+    if (serviceSelect) { // S'assurer que l'élément select existe
+        loadServices();
     }
 
 
     // Gestion de la soumission du formulaire
     if (registerForm) {
         registerForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Empêche la soumission classique du formulaire
+            event.preventDefault();
 
-            hideMessages(); // Masquer tout message précédent
+            hideMessages();
 
-            // Récupérer les valeurs des champs
             const nom = document.getElementById('nom').value.trim();
             const prenom = document.getElementById('prenom').value.trim();
             const matricule = document.getElementById('matricule').value.trim();
-            const service = document.getElementById('service').value.trim();
+            const service = serviceSelect.value; // Récupère la valeur du sélecteur
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
             const confirmPassword = confirmPasswordInput.value.trim();
 
-            // --- Validation côté client ---
+            // Validation côté client
             if (!nom || !prenom || !matricule || !service || !email || !password || !confirmPassword) {
-                showErrorMessage("Veuillez remplir tous les champs.");
+                showMessage("Veuillez remplir tous les champs.");
+                return;
+            }
+
+            if (service === "") { // S'assurer qu'un service a été sélectionné
+                showMessage("Veuillez sélectionner votre service.");
                 return;
             }
 
             if (password !== confirmPassword) {
-                showErrorMessage("Les mots de passe ne correspondent pas.");
-                passwordInput.value = ''; // Efface les mots de passe pour ressaisie
+                showMessage("Les mots de passe ne correspondent pas.");
+                passwordInput.value = '';
                 confirmPasswordInput.value = '';
                 return;
             }
 
-            if (password.length < 8) { // Exemple: exiger une longueur minimale
-                showErrorMessage("Le mot de passe doit contenir au moins 8 caractères.");
+            if (password.length < 8) {
+                showMessage("Le mot de passe doit contenir au moins 8 caractères.");
                 passwordInput.value = '';
                 confirmPasswordInput.value = '';
                 return;
             }
 
             if (!acceptTermsCheckbox.checked) {
-                showErrorMessage("Vous devez accepter les mentions légales et la politique de confidentialité.");
+                showMessage("Vous devez accepter les mentions légales et la politique de confidentialité.");
                 return;
             }
 
-            // Désactiver le bouton de soumission et ajouter un indicateur de chargement
             const submitButton = registerForm.querySelector('button[type="submit"]');
             const originalButtonText = submitButton.innerHTML;
             submitButton.disabled = true;
@@ -103,28 +139,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ nom, prenom, matricule, service, email, password })
                 });
 
-                const data = await response.json(); // Supposons que l'API renvoie du JSON
+                const data = await response.json();
 
-                if (response.ok) { // Le statut HTTP est 2xx
+                if (response.ok) {
                     if (data.success) {
-                        showSuccessMessage(data.message || 'Votre demande a été soumise avec succès !');
-                        registerForm.reset(); // Vider le formulaire après succès
-                        // Optionnel: rediriger après quelques secondes
+                        showMessage(data.message || 'Votre demande a été soumise avec succès !', 'success');
+                        registerForm.reset();
+                        // Rediriger après quelques secondes
                         setTimeout(() => {
                             window.location.href = '/se-connecter';
-                        }, 3000); // Rediriger après 3 secondes
+                        }, 3000);
                     } else {
-                        showErrorMessage(data.message || 'Une erreur est survenue lors de la soumission de votre demande.');
+                        showMessage(data.message || 'Une erreur est survenue lors de la soumission de votre demande.', 'error');
                     }
                 } else {
-                    showErrorMessage(data.message || 'Une erreur de serveur est survenue lors de la soumission.');
+                    showMessage(data.message || 'Une erreur de serveur est survenue lors de la soumission.', 'error');
                     console.error('Erreur API:', response.status, data);
                 }
             } catch (error) {
                 console.error('Erreur réseau ou du serveur:', error);
-                showErrorMessage('Impossible de se connecter au serveur. Veuillez vérifier votre connexion.');
+                showMessage('Impossible de se connecter au serveur. Veuillez vérifier votre connexion.', 'error');
             } finally {
-                // Réactiver le bouton de soumission
                 submitButton.disabled = false;
                 submitButton.innerHTML = originalButtonText;
             }

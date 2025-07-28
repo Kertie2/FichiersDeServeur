@@ -2,6 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Éléments du formulaire de mise à jour de profil
     const profileUpdateForm = document.getElementById('profileUpdateForm');
     const profileMessageDiv = document.getElementById('profileMessage');
+    const profileServiceSelect = document.getElementById('profileService'); // Le sélecteur de service
+
+    // IMPORTANT : Récupérer le service actuel de l'utilisateur directement depuis l'attribut data-
+    // Cet attribut DOIT être défini dans views/profil.php par PHP:
+    // <select id="profileService" name="service" required data-current-service="<?php echo htmlspecialchars($user['service']); ?>">
+    const userCurrentService = profileServiceSelect ? profileServiceSelect.dataset.currentService : '';
 
     // Éléments du formulaire de changement de mot de passe
     const passwordChangeForm = document.getElementById('passwordChangeForm');
@@ -50,6 +56,56 @@ document.addEventListener('DOMContentLoaded', () => {
         passwordMessageDiv.className = 'password-message';
     }
 
+    // --- Fonction pour charger les services depuis l'API et pré-sélectionner ---
+    async function loadProfileServices() {
+        if (!profileServiceSelect) return; // Quitter si le sélecteur n'existe pas
+
+        // userCurrentService est déjà défini au début du script à partir du dataset
+        const currentService = userCurrentService; // Utiliser la variable déjà lue
+
+        try {
+            const response = await fetch('/api/v1/services-list-api/index.php');
+            const data = await response.json();
+
+            if (response.ok && data.success && data.services) {
+                // Vider les options existantes
+                profileServiceSelect.innerHTML = '';
+                // Ajouter une option par défaut si le service actuel n'est pas "A Définir"
+                // ou si vous voulez toujours une option par défaut non sélectionnée.
+                // Si l'utilisateur est déjà dans un service, le mettre par défaut.
+                if (!currentService || currentService === "A Définir" || !data.services.includes(currentService)) {
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.textContent = "Sélectionnez votre service";
+                    profileServiceSelect.appendChild(defaultOption);
+                }
+
+                data.services.forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service;
+                    option.textContent = service;
+                    if (service === currentService) { // Pré-sélectionner le service de l'utilisateur
+                        option.selected = true;
+                    }
+                    profileServiceSelect.appendChild(option);
+                });
+            } else {
+                showProfileMessage(data.message || 'Impossible de charger la liste des services. Veuillez réessayer.', 'error');
+                profileServiceSelect.disabled = true;
+            }
+        } catch (error) {
+            console.error('Erreur réseau lors du chargement des services de profil:', error);
+            showProfileMessage('Erreur réseau lors du chargement des services. Veuillez vérifier votre connexion.', 'error');
+            profileServiceSelect.disabled = true;
+        }
+    }
+
+    // Charger les services au chargement de la page si le sélecteur est présent
+    if (profileServiceSelect) {
+        loadProfileServices();
+    }
+
+
     // --- Gestion de la soumission du formulaire de mise à jour de profil ---
     if (profileUpdateForm) {
         profileUpdateForm.addEventListener('submit', async (event) => {
@@ -59,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData(profileUpdateForm);
             const data = Object.fromEntries(formData.entries());
 
-            // Simple validation
             if (!data.email || !data.nom || !data.prenom || !data.matricule || !data.service) {
                 showProfileMessage("Veuillez remplir tous les champs.");
                 return;
