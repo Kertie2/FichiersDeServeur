@@ -67,10 +67,10 @@ try {
         ]);
 
         // Optionnel: Mettre à jour l'ID de session dans la BDD si vous voulez le suivre
-        $updateStmt = $pdo->prepare("UPDATE utilisateurs SET session_id = :session_id WHERE id = :id");
-        $updateStmt->execute(['session_id' => session_id(), 'id' => $user['id']]);
+        // $updateStmt = $pdo->prepare("UPDATE utilisateurs SET session_id = :session_id WHERE id = :id");
+        // $updateStmt->execute(['session_id' => session_id(), 'id' => $user['id']]);
 
-        sendJsonResponse(true, 'Connexion réussie !', ['redirect_url' => '/dashboard']);
+        sendJsonResponse(true, 'Connexion réussie !', ['redirect_url' => '/']);
 
     } else {
         // Authentification échouée

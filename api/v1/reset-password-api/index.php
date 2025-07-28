@@ -16,7 +16,7 @@ header('Content-Type: application/json');
 session_start();
 
 // Inclure les fichiers de configuration
-$db_config = require_once '../config/database.php';
+$db_config = require_once '../config/database.php'; 
 $email_config = require_once '../config/email.php'; // Inclure le fichier de config email
 
 // Fonction utilitaire pour envoyer une réponse JSON et terminer le script
@@ -53,12 +53,17 @@ if (empty($matricule)) {
 // Connexion à la base de données
 try {
     $dsn = "mysql:host={$db_config['host']};dbname={$db_config['db_name']};charset={$db_config['charset']}";
+    // Si vous utilisez un socket UNIX, décommentez la ligne suivante et commentez celle au-dessus
+    // $dsn = "mysql:unix_socket={$db_config['host']};dbname={$db_config['db_name']};charset={$db_config['charset']}";
+    
     $pdo = new PDO($dsn, $db_config['username'], $db_config['password']);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log("Erreur de connexion BDD (reset-password): " . $e->getMessage());
+    // --- MODIFICATION ICI : Revenir au message générique ---
     sendJsonResponse(false, 'Impossible de se connecter à la base de données. Veuillez réessayer plus tard.');
+    // --- FIN DE LA MODIFICATION ---
 }
 
 // Vérifier si l'utilisateur existe avec l'email et le matricule fournis
@@ -79,7 +84,7 @@ try {
     $stmt = $pdo->prepare("DELETE FROM password_resets WHERE email = :email");
     $stmt->execute(['email' => $email]);
 
-    // Enregistrer le nouveau token
+    // Enregistrer le nouveau token dans la table password_resets
     $stmt = $pdo->prepare("INSERT INTO password_resets (email, token, expires_at) VALUES (:email, :token, :expires_at)");
     $stmt->execute([
         'email' => $email,
@@ -93,12 +98,13 @@ try {
     $senderEmail = $email_config['mailjet']['sender_email'];
     $senderName = $email_config['mailjet']['sender_name'];
 
+    $mj = new Client($mailjetApiKey, $mailjetSecretKey, true, ['version' => 'v3.1']);
+
     $recipientEmail = $email;
     $recipientName = $user['nom'] . ' ' . $user['prenom'];
 
     $resetLink = "https://" . $_SERVER['HTTP_HOST'] . "/reset-password?token=" . $token;
 
-    // --- Nouveau contenu HTML pour l'email ---
     $htmlContent = '
     <!DOCTYPE html>
     <html lang="fr">
@@ -107,11 +113,10 @@ try {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Réinitialisation de mot de passe</title>
         <style>
-            /* CSS inline pour une meilleure compatibilité client mail */
             body {
                 font-family: Arial, sans-serif;
-                background-color: #1a1a2e; /* dark-bg */
-                color: #e0e0e0; /* text-color */
+                background-color: #1a1a2e;
+                color: #e0e0e0;
                 margin: 0;
                 padding: 0;
                 -webkit-text-size-adjust: 100%;
@@ -121,14 +126,14 @@ try {
             .container {
                 max-width: 600px;
                 margin: 20px auto;
-                background-color: #2a2a4a; /* card-bg */
+                background-color: #2a2a4a;
                 padding: 30px;
                 border-radius: 8px;
                 box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-                border: 1px solid #4a4a7a; /* input-border */
+                border: 1px solid #4a4a7a;
             }
             h1, h2, h3 {
-                color: #007bff; /* primary-color */
+                color: #007bff;
                 text-align: center;
             }
             p {
@@ -139,8 +144,8 @@ try {
                 display: inline-block;
                 padding: 12px 25px;
                 margin: 20px auto;
-                background-color: #007bff; /* button-bg */
-                color: #ffffff !important; /* Force blanc pour le texte du bouton */
+                background-color: #007bff;
+                color: #ffffff !important;
                 text-decoration: none;
                 border-radius: 5px;
                 font-weight: bold;
@@ -152,23 +157,23 @@ try {
                 transition: background-color 0.3s ease;
             }
             .button:hover {
-                background-color: #0056b3; /* button-hover-bg */
+                background-color: #0056b3;
             }
             .footer {
                 text-align: center;
                 margin-top: 30px;
                 font-size: 0.9em;
-                color: #6c757d; /* secondary-color */
+                color: #6c757d;
                 border-top: 1px solid #4a4a7a;
                 padding-top: 20px;
             }
             .warning {
-                color: #ff4d4f; /* error-color */
+                color: #ff4d4f;
                 font-weight: bold;
             }
             .link-text {
-                color: #8ab4f8; /* link-color */
-                word-break: break-all; /* Pour les liens très longs */
+                color: #8ab4f8;
+                word-break: break-all;
             }
         </style>
     </head>
@@ -207,7 +212,7 @@ try {
                 ],
                 'Subject' => "Réinitialisation de votre mot de passe Intranet FDO",
                 'TextPart' => "Bonjour,\n\nVous avez demandé la réinitialisation de votre mot de passe pour l'Intranet FDO.\nCliquez sur le lien suivant pour réinitialiser votre mot de passe : \n" . $resetLink . "\n\nCe lien est valide pendant 1 heure.\nSi vous n'avez pas demandé cette réinitialisation, veuillez ignorer cet email.\n\nCordialement,\nL'administration de l'Intranet FDO",
-                'HTMLPart' => $htmlContent // Utilisation de la nouvelle variable
+                'HTMLPart' => $htmlContent
             ]
         ]
     ];
@@ -220,11 +225,15 @@ try {
     } else {
         $mailErrorData = $response->getData();
         error_log("Échec de l'envoi d'email de réinitialisation pour " . $email . ". Mailjet API Error: " . json_encode($mailErrorData));
+        // --- MODIFICATION ICI : Revenir au message générique ---
         sendJsonResponse(false, 'La demande a été traitée, mais l\'envoi de l\'email a échoué. Veuillez contacter l\'administrateur.');
+        // --- FIN DE LA MODIFICATION ---
     }
 
 } catch (PDOException $e) {
     error_log("Erreur BDD (reset-password insertion token): " . $e->getMessage());
+    // --- MODIFICATION ICI : Revenir au message générique ---
     sendJsonResponse(false, 'Une erreur est survenue lors du traitement de votre demande. Veuillez réessayer.');
+    // --- FIN DE LA MODIFICATION ---
 }
 ?>
