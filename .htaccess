@@ -9,3 +9,6 @@ RewriteEngine On
 
 RewriteRule ^api/docs/.*$ - [F,L]
 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L,QSA] # QSA = Query String Append (conserve les paramètres GET)
