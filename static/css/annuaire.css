@@ -1,0 +1,221 @@
+/* /static/css/annuaire.css */
+
+/* Importation des variables globales */
+@import url('/static/css/variables.css');
+
+/* Styles généraux de la section annuaire */
+.annuaire-section {
+    margin-bottom: 30px;
+    padding: 25px;
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.annuaire-section h3 {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--input-border);
+    padding-bottom: 10px;
+}
+
+.annuaire-section .section-description {
+    color: var(--secondary-color);
+    font-size: 0.95em;
+    margin-bottom: 25px;
+}
+
+/* Styles pour le conteneur générique .input-group */
+.input-group {
+    position: relative;
+    margin-bottom: 25px; /* Espacement standard entre les groupes d'input */
+}
+
+/* Styles GÉNÉRIQUES pour tous les input et select DANS un .input-group */
+.input-group input,
+.input-group select {
+    width: 100%; /* Remplir la largeur du parent */
+    padding: 15px 15px 15px 50px; /* Padding standard pour l'icône à gauche */
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    color: var(--text-color);
+    font-size: 1em; /* Taille de police standard */
+    outline: none;
+    transition: border-color var(--animation-speed), box-shadow var(--animation-speed);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box; /* IMPORTANT: Inclut padding et border dans la largeur */
+    z-index: 0; /* L'input/select est en dessous de l'icône */
+}
+
+/* Styles GÉNÉRIQUES pour toutes les icônes DANS un .input-group */
+.input-group .icon {
+    position: absolute;
+    left: 15px; /* Position standard pour l'icône */
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+    font-size: 1.1em; /* Taille d'icône standard */
+    z-index: 1; /* L'icône est au-dessus de l'input */
+}
+
+/* Styles spécifiques à la barre de recherche (ajustements par-dessus les styles génériques) */
+.search-bar {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-bar .input-group { /* Moins d'espace en bas pour les inputs de la barre de recherche */
+    margin-bottom: 0;
+}
+
+.search-bar .input-group input,
+.search-bar .input-group select {
+    padding: 10px 10px 10px 40px; /* Padding ajusté pour la barre de recherche (plus petit) */
+    font-size: 0.95em; /* Taille de police plus petite pour la barre de recherche */
+}
+
+.search-bar .input-group .icon {
+    left: 12px; /* Position ajustée pour l'icône de la barre de recherche */
+    font-size: 1em; /* Taille d'icône ajustée pour la barre de recherche */
+}
+
+/* Flèche personnalisée pour tous les select */
+.input-group select {
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0e0e0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 40px; /* Espace pour la flèche SVG */
+}
+
+
+.search-bar input:focus,
+.search-bar select:focus,
+.input-group input:focus, /* Appliquer aux inputs génériques */
+.input-group select:focus { /* Appliquer aux selects génériques */
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
+}
+
+.search-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: var(--button-hover-bg);
+}
+
+/* Styles pour le tableau des membres */
+.members-list-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid var(--input-border);
+    padding: 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #2e2e52;
+}
+
+tbody tr:hover {
+    background-color: #38386c;
+}
+
+.view-member-details-button {
+    background-color: var(--button-bg);
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: background-color 0.3s ease;
+}
+
+.view-member-details-button:hover {
+    background-color: var(--button-hover-bg);
+}
+
+.annuaire-message {
+    font-size: 0.9em;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+.annuaire-message.error {
+    color: var(--error-color);
+    background-color: rgba(255, 77, 79, 0.1);
+    border: 1px solid var(--error-color);
+}
+.annuaire-message.success {
+    color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+    border: 1px solid #4CAF50;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .search-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .search-input, .search-select {
+        min-width: 100%;
+    }
+    .search-button {
+        width: 100%;
+    }
+    .modal-content {
+        max-width: 95%;
+        padding: 20px;
+    }
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    .modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .action-button {
+        width: 100%;
+    }
+}

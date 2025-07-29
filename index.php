@@ -23,7 +23,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-    $stmt = $pdo->prepare("SELECT matricule, nom, prenom, service, email, statut, role FROM utilisateurs WHERE id = :id");
+    $stmt = $pdo->prepare("SELECT id, matricule, nom, prenom, service, email, statut, role FROM utilisateurs WHERE id = :id");
     $stmt->execute(['id' => $_SESSION['user_id']]);
     $user = $stmt->fetch();
 
@@ -72,8 +72,10 @@ switch ($requestUri) {
         $activeNav = 'Procédures';
         break;
     case '/annuaire':
-        $viewFile = __DIR__ . '/views/annuaire.php'; // A créer
+        $viewFile = __DIR__ . '/views/annuaire.php';
         $pageTitle = 'Annuaire';
+        $pageCss = '/static/css/annuaire.css';
+        $pageJs = '/static/js/annuaire.js';
         $activeNav = 'Annuaire';
         break;
     // ... Ajoutez d'autres cas pour vos nouvelles pages : attentes, signalements, administration ...
@@ -90,8 +92,10 @@ switch ($requestUri) {
         }
         break;
     case '/signalements':
-        $viewFile = __DIR__ . '/views/signalements.php'; // A créer
+        $viewFile = __DIR__ . '/views/signalements.php';
         $pageTitle = 'Signalements';
+        $pageCss = '/static/css/signalements.css';
+        $pageJs = '/static/js/signalements.js';
         $activeNav = 'Signalements';
         if ($user['role'] !== 'Admin') {
             header('Location: /');
@@ -191,6 +195,24 @@ if (!file_exists($viewFile)) {
                 }
                 ?>
             </main>
+        </div>
+    </div>
+
+    <div id="genericConfirmModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" id="closeGenericModalButton">&times;</button>
+            <h3 id="genericModalTitle">Titre de la Demande</h3>
+            <p id="genericModalMessage">Message de confirmation ou d'information.</p>
+                
+            <div id="genericModalInputGroup" class="input-group" style="display: none;">
+                <i class="fas fa-pencil-alt icon"></i> <input type="text" id="genericModalInput" placeholder="Saisissez ici...">
+            </div>
+                
+            <div id="genericModalActions" class="modal-actions">
+                <button class="action-button primary-button" id="genericModalConfirmButton">Confirmer</button>
+                <button class="action-button secondary-button" id="genericModalCancelButton">Annuler</button>
+            </div>
+            <div id="genericModalFeedback" class="modal-message"></div>
         </div>
     </div>
 

@@ -289,3 +289,195 @@ body::before {
         grid-template-columns: 1fr;
     }
 }
+
+/* Styles pour les modales (générique et détail membre) - DÉPLACÉS ICI */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* Empêche les clics à travers quand masqué */
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all; /* Autorise les interactions quand actif */
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    width: 100%;
+    max-width: 650px; /* Taille par défaut pour les modales de contenu */
+    box-sizing: border-box;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s ease-out;
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-content h3 {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.modal-content .modal-body-content {
+    text-align: left;
+    color: var(--text-color);
+    margin-bottom: 25px;
+}
+
+.detail-grid { /* Utilisé pour les détails de membre ou d'attente */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 0 10px;
+}
+.detail-grid .detail-item {
+    padding: 10px;
+    background-color: var(--input-bg);
+    border-radius: 5px;
+    border: 1px solid var(--input-border);
+}
+.detail-grid strong {
+    color: var(--primary-color);
+    margin-right: 5px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(var(--text-color), 0.1);
+}
+
+.action-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-button i {
+    font-size: 1em;
+}
+
+/* Boutons d'actions spécifiques aux modales (couleurs) */
+.action-button.report-button { background-color: #ffc107; color: #333; }
+.action-button.report-button:hover { background-color: #e0a800; transform: translateY(-2px); }
+
+.action-button.message-button { background-color: #17a2b8; color: white; }
+.action-button.message-button:hover { background-color: #138496; transform: translateY(-2px); }
+
+.action-button.change-password-button { background-color: #6f42c1; color: white; }
+.action-button.change-password-button:hover { background-color: #563d7c; transform: translateY(-2px); }
+
+.action-button.change-email-button { background-color: #fd7e14; color: white; }
+.action-button.change-email-button:hover { background-color: #e66a00; transform: translateY(-2px); }
+
+.action-button.delete-account-button { background-color: #dc3545; color: white; }
+.action-button.delete-account-button:hover { background-color: #c82333; transform: translateY(-2px); }
+
+/* Nouveaux styles pour les boutons de la modale générique (si besoin de couleurs spécifiques ici) */
+.action-button.primary-button {
+    background-color: var(--primary-color);
+    color: white;
+}
+.action-button.primary-button:hover {
+    background-color: var(--button-hover-bg);
+}
+.action-button.secondary-button {
+    background-color: var(--secondary-color);
+    color: white;
+}
+.action-button.secondary-button:hover {
+    background-color: #5a6268;
+}
+
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2em;
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: color var(--animation-speed);
+}
+
+.close-button:hover {
+    color: var(--primary-color);
+}
+
+.annuaire-message, .modal-message { /* Ce sélecteur peut être revu si .annuaire-message est spécifique */
+    font-size: 0.9em;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+.annuaire-message.error, .modal-message.error {
+    color: var(--error-color);
+    background-color: rgba(255, 77, 79, 0.1);
+    border: 1px solid var(--error-color);
+}
+.annuaire-message.success, .modal-message.success {
+    color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+    border: 1px solid #4CAF50;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modal-content {
+        max-width: 95%;
+        padding: 20px;
+    }
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    .modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .action-button {
+        width: 100%;
+    }
+}
