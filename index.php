@@ -103,8 +103,10 @@ switch ($requestUri) {
         }
         break;
     case '/administration':
-        $viewFile = __DIR__ . '/views/administration.php'; // A créer
+        $viewFile = __DIR__ . '/views/administration.php';
         $pageTitle = 'Administration Système';
+        $pageCss = '/static/css/administration.css';
+        $pageJs = '/static/js/administration.js';
         $activeNav = 'Administration';
         if ($user['role'] !== 'Admin') { // Seuls les admins pour cette page
             header('Location: /');
