@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Éléments de la page d'administration
     const procedureTypesListDiv = document.getElementById('procedureTypesList');
     const adminMessageDiv = document.getElementById('adminMessage');
+    const openLogsModalButton = document.getElementById('openLogsModalButton'); // Bouton pour ouvrir la modale des logs
 
     // Éléments de la modale de gestion des champs
     const manageFieldsModal = document.getElementById('manageFieldsModal');
@@ -28,6 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const editFieldOrder = document.getElementById('editFieldOrder');
     const saveFieldButton = document.getElementById('saveFieldButton');
     const fieldEditMessageDiv = document.getElementById('fieldEditMessage');
+
+    // Nouveaux éléments de la modale des logs
+    const logsModal = document.getElementById('logsModal');
+    const closeLogsModalButton = document.getElementById('closeLogsModalButton');
+    const logTypeSelect = document.getElementById('logTypeSelect');
+    const logLinesInput = document.getElementById('logLinesInput');
+    const refreshLogsButton = document.getElementById('refreshLogsButton');
+    const logContentArea = document.getElementById('logContent'); // Zone où le texte des logs est affiché
+    const logsModalMessageDiv = document.getElementById('logsModalMessage'); // Message pour la modale des logs
 
     let currentProcedureTypeId = null;
 
@@ -74,6 +84,22 @@ document.addEventListener('DOMContentLoaded', () => {
         fieldEditMessageDiv.textContent = '';
         fieldEditMessageDiv.className = 'modal-message';
     }
+
+    // Nouveaux messages pour la modale des logs
+    function showLogsModalMessage(message, type = 'error') {
+        logsModalMessageDiv.textContent = message;
+        logsModalMessageDiv.className = 'modal-message ' + type;
+        logsModalMessageDiv.style.display = 'block';
+        logsModalMessageDiv.style.opacity = '0';
+        void logsModalMessageDiv.offsetWidth;
+        logsModalMessageDiv.style.opacity = '1';
+    }
+    function hideLogsModalMessage() {
+        logsModalMessageDiv.style.display = 'none';
+        logsModalMessageDiv.textContent = '';
+        logsModalMessageDiv.className = 'modal-message';
+    }
+
 
     // --- Fonction d'échappement HTML ---
     function htmlEscape(str) {
@@ -428,9 +454,68 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
-    // REMOVED: Gestion de l'ouverture/fermeture et fonctions de la modale de config générale
-    // ...
+
+    // --- Gestion de l'ouverture/fermeture et fonctions de la modale des logs ---
+    if (openLogsModalButton) {
+        openLogsModalButton.addEventListener('click', () => {
+            logsModal.classList.add('active'); // Afficher la modale des logs
+            hideLogsModalMessage(); // Cacher les messages précédents
+            loadLogs(logTypeSelect.value, parseInt(logLinesInput.value, 10)); // Charger les logs initiaux
+        });
+    }
+    if (closeLogsModalButton) {
+        closeLogsModalButton.addEventListener('click', () => {
+            logsModal.classList.remove('active');
+            hideLogsModalMessage();
+            logContentArea.innerHTML = '<pre>Chargement des logs...</pre>'; // Réinitialiser le contenu
+        });
+    }
+    if (logsModal) {
+        logsModal.addEventListener('click', (event) => {
+            if (event.target === logsModal) {
+                logsModal.classList.remove('active');
+                hideLogsModalMessage();
+                logContentArea.innerHTML = '<pre>Chargement des logs...</pre>';
+            }
+        });
+    }
+    if (refreshLogsButton) {
+        refreshLogsButton.addEventListener('click', () => {
+            loadLogs(logTypeSelect.value, parseInt(logLinesInput.value, 10));
+        });
+    }
+    if (logTypeSelect) {
+        logTypeSelect.addEventListener('change', () => {
+            loadLogs(logTypeSelect.value, parseInt(logLinesInput.value, 10));
+        });
+    }
+    if (logLinesInput) {
+        logLinesInput.addEventListener('change', () => {
+            loadLogs(logTypeSelect.value, parseInt(logLinesInput.value, 10));
+        });
+    }
+
+    // Fonction pour charger les logs depuis l'API
+    async function loadLogs(logType = 'error', numLines = 50) {
+        logContentArea.innerHTML = '<pre>Chargement des logs...</pre>';
+        hideLogsModalMessage();
+        try {
+            const response = await fetch(`/api/v1/admin-logs-api/index.php?action=get_logs&type=${logType}&lines=${numLines}`);
+            const data = await response.json();
+
+            if (response.ok && data.success && data.logs) {
+                logContentArea.innerHTML = `<pre>${htmlEscape(data.logs)}</pre>`;
+            } else {
+                showLogsModalMessage(data.message || 'Erreur lors du chargement des logs.', 'error');
+                logContentArea.innerHTML = `<pre style="color:var(--error-color);">Impossible de charger les logs : ${htmlEscape(data.message || 'Erreur inconnue')}</pre>`;
+            }
+        } catch (error) {
+            console.error('Erreur réseau chargement logs:', error);
+            showLogsModalMessage('Erreur réseau lors du chargement des logs. Veuillez vérifier votre connexion.', 'error');
+            logContentArea.innerHTML = '<pre style="color:var(--error-color);">Erreur réseau. Impossible de charger les logs.</pre>';
+        }
+    }
+
 
     // --- Exécution initiale au chargement de la page ---
     loadProcedureTypes();

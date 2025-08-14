@@ -39,8 +39,7 @@ $loggedInUserRole = $user['role'];
         <h4>Options Système</h4>
         <p>Accédez aux options systèmes.</p>
         <div class="admin-actions-grid">
-            <a href="#" class="admin-action-card disabled">
-                <i class="fas fa-file-invoice"></i>
+            <a href="#" id="openLogsModalButton" class="admin-action-card"> <i class="fas fa-file-invoice"></i>
                 <span>Historique des Logs</span>
             </a>
         </div>
@@ -111,6 +110,34 @@ $loggedInUserRole = $user['role'];
                 <button type="submit" id="saveFieldButton" class="action-button primary-button"><i class="fas fa-save"></i> Enregistrer le champ</button>
                 <div id="fieldEditMessage" class="modal-message"></div>
             </form>
+        </div>
+    </div>
+</div>
+
+<div id="logsModal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="close-button" id="closeLogsModalButton">&times;</button>
+        <h3>Historique des Logs Apache</h3>
+        <div class="modal-body-content">
+            <div class="log-controls">
+                <div class="input-group log-select-group">
+                    <i class="fas fa-file-alt icon"></i>
+                    <select id="logTypeSelect">
+                        <option value="error">error.log</option>
+                        <option value="access">access.log</option>
+                    </select>
+                </div>
+                <div class="input-group log-lines-group">
+                    <i class="fas fa-list-ol icon"></i>
+                    <input type="number" id="logLinesInput" value="50" min="1" max="500">
+                    <label for="logLinesInput" class="log-lines-label">lignes</label>
+                </div>
+                <button id="refreshLogsButton" class="action-button primary-button"><i class="fas fa-sync-alt"></i> Rafraîchir</button>
+            </div>
+            <div id="logContent" class="log-content-area">
+                <pre>Chargement des logs...</pre>
+            </div>
+            <div id="logsModalMessage" class="modal-message"></div>
         </div>
     </div>
 </div>

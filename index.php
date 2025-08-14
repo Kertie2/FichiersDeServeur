@@ -52,25 +52,27 @@ switch ($requestUri) {
     case '/':
         $viewFile = __DIR__ . '/views/index.php';
         $pageTitle = 'Accueil';
-        $activeNav = 'Accueil'; // ou 'Tableau de bord' si vous voulez une entrée séparée dans la nav
+        $activeNav = 'Accueil';
         break;
     case '/dashboard':
         $viewFile = __DIR__ . '/views/dashboard.php';
         $pageTitle = 'Tableau de bord';
-        $activeNav = 'Tableau de bord'; // ou 'Tableau de bord' si vous voulez une entrée séparée dans la nav
+        $activeNav = 'Tableau de bord';
         break;
     case '/profil':
-        $viewFile = __DIR__ . '/views/profil.php'; // Ce fichier sera créé ensuite
+        $viewFile = __DIR__ . '/views/profil.php';
         $pageTitle = 'Mon Profil';
-        $pageCss = '/static/css/profil.css'; // Ou index.css si peu de styles spécifiques
-        $pageJs = '/static/js/profil.js'; // Ce fichier sera créé ensuite
+        $pageCss = '/static/css/profil.css';
+        $pageJs = '/static/js/profil.js';
         $activeNav = 'Mon profil';
         break;
     case '/procedures':
-        $viewFile = __DIR__ . '/views/procedures.php'; // A créer
-        $pageTitle = 'Gestion des Procédures';
-        $activeNav = 'Procédures';
-        break;
+            $viewFile = __DIR__ . '/views/procedures.php';
+            $pageTitle = 'Gestion des Procédures';
+            $pageCss = '/static/css/procedures.css';
+            $pageJs = '/static/js/procedures.js';
+            $activeNav = 'Procédures';
+            break;
     case '/annuaire':
         $viewFile = __DIR__ . '/views/annuaire.php';
         $pageTitle = 'Annuaire';
@@ -78,7 +80,6 @@ switch ($requestUri) {
         $pageJs = '/static/js/annuaire.js';
         $activeNav = 'Annuaire';
         break;
-    // ... Ajoutez d'autres cas pour vos nouvelles pages : attentes, signalements, administration ...
     case '/attentes':
         $viewFile = __DIR__ . '/views/attentes.php';
         $pageTitle = 'Comptes en Attente';

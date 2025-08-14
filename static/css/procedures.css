@@ -1,0 +1,461 @@
+/* /static/css/procedures.css */
+
+/* Importation des variables globales */
+@import url('/static/css/variables.css');
+
+/* Styles généraux de la section procédures */
+.procedures-section {
+    margin-bottom: 30px;
+    padding: 25px;
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.procedures-section h3 {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--input-border);
+    padding-bottom: 10px;
+}
+
+.procedures-section .section-description {
+    color: var(--secondary-color);
+    font-size: 0.95em;
+    margin-bottom: 25px;
+}
+
+/* Styles de la barre de recherche (similaire à l'annuaire) */
+.search-bar {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-bar .input-group {
+    flex-grow: 1;
+    min-width: 250px;
+    position: relative;
+    margin-bottom: 0;
+}
+
+.search-bar .input-group input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    color: var(--text-color);
+    font-size: 0.95em;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    z-index: 0;
+}
+
+.search-bar .input-group .icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+    font-size: 1em;
+    z-index: 1;
+}
+
+.search-bar input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
+}
+
+.search-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: var(--button-hover-bg);
+}
+
+/* Styles pour la liste des personnes */
+.persons-list-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid var(--input-border);
+    padding: 12px;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 0.95em;
+}
+
+th {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #2e2e52;
+}
+
+tbody tr:hover {
+    background-color: #38386c;
+}
+
+.view-person-details-button {
+    background-color: var(--button-bg);
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: background-color 0.3s ease;
+}
+
+.view-person-details-button:hover {
+    background-color: var(--button-hover-bg);
+}
+
+/* Section "Ajouter personne" */
+.add-person-section {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--input-bg);
+    border-radius: 8px;
+    border: 1px dashed var(--input-border);
+}
+.add-person-section p {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+.add-person-section .action-button {
+    padding: 10px 20px;
+    font-size: 1em;
+}
+
+/* --- SEULS LES STYLES SPÉCIFIQUES AUX CONTENUS DES MODALES DE CETTE PAGE RESTENT ICI --- */
+/* Les règles de base .modal-overlay, .modal-content etc. sont dans index.css */
+
+#personDetailModal .modal-content,
+#addPersonModal .modal-content,
+#infractionDetailModal .modal-content,
+#addInfractionModal .modal-content,
+#manageFPRModal .modal-content {
+    max-width: 850px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+#infractionDetailModal .modal-content {
+    max-width: 600px;
+}
+#addPersonModal .modal-content, #addInfractionModal .modal-content, #manageFPRModal .modal-content {
+    max-width: 600px;
+}
+
+
+.modal-body-content {
+    padding-top: 15px;
+    text-align: left;
+}
+
+/* Sous-sections de détail (dans la modale de détail personne) */
+.detail-subsection {
+    background-color: var(--input-bg);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--input-border);
+}
+.detail-subsection h4 {
+    color: var(--link-color);
+    font-size: 1.2em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px dashed rgba(var(--secondary-color), 0.2);
+    padding-bottom: 5px;
+}
+.detail-subsection .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+.detail-subsection .detail-item {
+    background-color: var(--card-bg);
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #3c3c64;
+}
+.detail-subsection .detail-item strong {
+    color: var(--primary-color);
+    margin-right: 5px;
+}
+.detail-subsection .detail-item span {
+    font-size: 0.9em;
+}
+.detail-item.detail-full-width {
+    grid-column: 1 / -1;
+}
+
+
+/* Permis de Conduire spécifique */
+#detailStatutPermis.Valide { color: #4CAF50; font-weight: bold; }
+#detailStatutPermis.Suspendu, #detailStatutPermis.Annulé { color: #ff4d4f; font-weight: bold; }
+
+/* Statut FPR spécifique */
+#detailFPRStatus.recherché { color: #f44336; font-weight: bold; }
+#detailFPRStatus.non_recherché { color: #4CAF50; font-weight: bold; }
+
+
+/* Historique des Infractions */
+#infractionHistoryList {
+    margin-top: 15px;
+}
+.infraction-item {
+    background-color: var(--card-bg);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #3c3c64;
+    cursor: pointer;
+}
+.infraction-item:hover {
+    background-color: #38386c;
+}
+.infraction-item-info {
+    flex-grow: 1;
+    text-align: left;
+}
+.infraction-item-info strong {
+    color: var(--text-color);
+    font-size: 1em;
+}
+.infraction-item-info span {
+    display: block;
+    font-size: 0.8em;
+    color: var(--secondary-color);
+}
+.infraction-item-actions {
+    margin-left: 10px;
+}
+.infraction-item-actions .action-button {
+    padding: 5px 8px;
+    font-size: 0.75em;
+}
+#addInfractionButton {
+    margin-top: 20px;
+    width: auto;
+    display: inline-flex;
+}
+
+/* Styles pour les formulaires dans les modales (Ajout Personne, Ajout Infraction, FPR) */
+/* Règle générique pour les input-group dans les formulaires des modales */
+#addPersonForm .input-group,
+#addInfractionForm .input-group,
+#fprForm .input-group {
+    margin-bottom: 15px;
+    position: relative;
+}
+/* Styles génériques pour input, select, textarea dans les formulaires des modales */
+#addPersonForm input, #addPersonForm select, #addPersonForm textarea,
+#addInfractionForm input, #addInfractionForm select, #addInfractionForm textarea,
+#fprForm input, #fprForm select, #fprForm textarea {
+    width: 100%; /* << CORRECTION CLÉ: Utiliser 100% de largeur */
+    padding: 15px 15px 15px 50px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    color: var(--text-color);
+    font-size: 1em;
+    box-sizing: border-box; /* Assure que padding/border sont inclus dans width */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    z-index: 0;
+}
+#addPersonForm textarea, #addInfractionForm textarea, #fprForm textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+#addPersonForm select, #addInfractionForm select, #fprForm select {
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0e0e0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 40px;
+}
+/* Styles pour les icônes dans les formulaires des modales */
+#addPersonForm .input-group .icon, #addInfractionForm .input-group .icon, #fprForm .input-group .icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+    font-size: 1.1em;
+    z-index: 1; /* L'icône est au-dessus */
+}
+
+/* Style spécifique pour les input type="date" et "time" pour mieux les aligner */
+#addPersonDateNaissance,
+#addInfractionForm input[type="date"],
+#addInfractionForm input[type="time"],
+#addInfractionForm input[type="datetime-local"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 15px;
+}
+
+
+/* Messages (succès/erreur) */
+.procedures-message,
+#personDetailModalMessage,
+#addPersonModalMessage,
+#infractionDetailModalMessage,
+#addInfractionModalMessage,
+#fprModalMessage {
+    font-size: 0.9em;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+.procedures-message.error, #personDetailModalMessage.error, #addPersonModalMessage.error, #infractionDetailModalMessage.error, #addInfractionModalMessage.error, #fprModalMessage.error {
+    color: var(--error-color);
+    background-color: rgba(255, 77, 79, 0.1);
+    border: 1px solid var(--error-color);
+}
+.procedures-message.success, #personDetailModalMessage.success, #addPersonModalMessage.success, #infractionDetailModalMessage.success, #addInfractionModalMessage.success, #fprModalMessage.success {
+    color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+    border: 1px solid #4CAF50;
+}
+
+
+/* Checkbox personnalisée (réutilisée) */
+.checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 1em;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: var(--text-color);
+    text-align: left;
+}
+.checkbox-container input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+.checkbox-container .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+}
+.checkbox-container:hover input[type="checkbox"] ~ .checkmark {
+    background-color: var(--input-bg);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+}
+.checkbox-container input[type="checkbox"]:checked ~ .checkmark {
+    background-color: var(--primary-color);
+}
+.checkbox-container .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.checkbox-container input[type="checkbox"]:checked ~ .checkmark:after {
+    display: block;
+}
+.checkbox-container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .search-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .search-bar .input-group {
+        min-width: 100%;
+    }
+    .search-button {
+        width: 100%;
+    }
+    th, td {
+        padding: 8px;
+        font-size: 0.85em;
+    }
+    .view-person-details-button {
+        font-size: 0.8em;
+        padding: 5px 8px;
+    }
+    .modal-content {
+        max-width: 95%;
+        padding: 20px;
+    }
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    .modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .action-button {
+        width: 100%;
+    }
+    .detail-item.detail-full-width {
+        grid-column: auto;
+    }
+    .detail-subsection .detail-grid {
+        grid-template-columns: 1fr;
+    }
+}

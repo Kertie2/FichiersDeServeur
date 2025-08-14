@@ -137,28 +137,50 @@
 }
 
 .procedure-type-actions .action-button.toggle-active {
-    background-color: var(--success-color, #4CAF50); /* Utilise une variable si définie, sinon vert */
+    background-color: var(--success-color, #4CAF50);
     color: white;
 }
 .procedure-type-actions .action-button.toggle-active.inactive-btn {
-    background-color: var(--error-color, #f44336); /* Rouge pour désactiver */
+    background-color: var(--error-color, #f44336);
+    color: white;
 }
 .procedure-type-actions .action-button.manage-fields {
-    background-color: var(--info-color, #17a2b8); /* Cyan */
+    background-color: var(--info-color, #17a2b8);
     color: white;
 }
 
 
-/* Styles des modales spécifiques à l'admin (manageFieldsModal, fieldEditModal) */
-#manageFieldsModal .modal-content, #fieldEditModal .modal-content {
-    max-width: 800px; /* Plus large pour la gestion des champs */
+/* Styles des modales spécifiques à l'admin (manageFieldsModal, fieldEditModal, logsModal) */
+/* Les styles généraux des modales (.modal-overlay, .modal-content, etc.) sont dans index.css */
+#manageFieldsModal .modal-content,
+#fieldEditModal .modal-content,
+#logsModal .modal-content { /* Ajout de logsModal ici */
+    max-width: 800px; /* Plus large pour la gestion des champs et les logs */
 }
 
-#manageFieldsModal .modal-body-content, #fieldEditModal .modal-body-content {
+/* Ajustements pour la hauteur et la largeur spécifique de la modale logs */
+#logsModal .modal-content {
+    max-width: 90%; /* Peut prendre plus de largeur */
+    height: 90%; /* Peut prendre plus de hauteur */
+    display: flex; /* Utiliser flexbox pour la disposition interne */
+    flex-direction: column;
+}
+#logsModal .modal-body-content {
+    flex-grow: 1; /* Permet au contenu de log de prendre tout l'espace disponible */
+    display: flex;
+    flex-direction: column;
+}
+
+
+#manageFieldsModal .modal-body-content,
+#fieldEditModal .modal-body-content,
+#logsModal .modal-body-content { /* Ces sélecteurs continuent de s'appliquer aux contenus spécifiques */
     padding-top: 15px;
 }
 
-#manageFieldsModal h3, #fieldEditModal h3 {
+#manageFieldsModal h3,
+#fieldEditModal h3,
+#logsModal h3 { /* Ajout de logsModal h3 */
     text-align: left;
 }
 
@@ -170,7 +192,7 @@
 #fieldsListContainer {
     margin-top: 20px;
     margin-bottom: 20px;
-    max-height: 400px; /* Hauteur maximale avec scroll */
+    max-height: 400px;
     overflow-y: auto;
     border: 1px solid var(--input-border);
     border-radius: 8px;
@@ -223,15 +245,18 @@
     font-size: 0.8em;
 }
 
-/* Styles du formulaire d'ajout/édition de champ */
-#fieldEditForm .input-group {
+/* Styles du formulaire d'ajout/édition de champ et des contrôles de logs */
+#fieldEditForm .input-group,
+.log-controls .input-group { /* Ajout de .log-controls */
     margin-bottom: 15px;
 }
 #fieldEditForm input[type="text"],
 #fieldEditForm input[type="number"],
 #fieldEditForm select,
-#fieldEditForm textarea {
-    width: calc(100% - 60px); /* Assurez-vous que ces styles sont cohérents avec les autres inputs */
+#fieldEditForm textarea,
+.log-controls input[type="number"], /* Ajout ici */
+.log-controls select { /* Ajout ici */
+    width: calc(100% - 60px);
     padding: 15px 15px 15px 50px;
     background-color: var(--input-bg);
     border: 1px solid var(--input-border);
@@ -249,7 +274,28 @@
     resize: vertical;
 }
 
-/* Checkbox personnalisée */
+/* Flèche personnalisée pour les selects dans les modales d'admin et logs */
+#fieldEditForm select,
+.log-controls select { /* Ajout ici */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0e0e0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 40px;
+}
+
+/* Styles pour les icônes dans les formulaires d'admin et logs */
+#fieldEditForm .input-group .icon,
+.log-controls .input-group .icon { /* Ajout ici */
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+    font-size: 1.1em;
+    z-index: 1;
+}
+
+/* Checkbox personnalisée (inchangée) */
 .checkbox-container {
     display: block;
     position: relative;
@@ -262,8 +308,9 @@
     -ms-user-select: none;
     user-select: none;
     color: var(--text-color);
+    text-align: left;
 }
-.checkbox-container input {
+.checkbox-container input[type="checkbox"] {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -280,11 +327,11 @@
     border: 1px solid var(--primary-color);
     border-radius: 4px;
 }
-.checkbox-container:hover input ~ .checkmark {
+.checkbox-container:hover input[type="checkbox"] ~ .checkmark {
     background-color: var(--input-bg);
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
 }
-.checkbox-container input:checked ~ .checkmark {
+.checkbox-container input[type="checkbox"]:checked ~ .checkmark {
     background-color: var(--primary-color);
 }
 .checkbox-container .checkmark:after {
@@ -292,7 +339,7 @@
     position: absolute;
     display: none;
 }
-.checkbox-container input:checked ~ .checkmark:after {
+.checkbox-container input[type="checkbox"]:checked ~ .checkmark:after {
     display: block;
 }
 .checkbox-container .checkmark:after {
@@ -307,8 +354,9 @@
     transform: rotate(45deg);
 }
 
-/* Messages pour les modales d'administration */
-#adminMessage, #fieldManageMessage, #fieldEditMessage {
+
+/* Messages pour les modales d'administration (inchangés) */
+#adminMessage, #fieldManageMessage, #fieldEditMessage, #logsModalMessage { /* Ajout de logsModalMessage */
     font-size: 0.9em;
     margin-top: 20px;
     padding: 10px;
@@ -317,15 +365,69 @@
     opacity: 0;
     animation: fadeIn 0.5s forwards;
 }
-#adminMessage.error, #fieldManageMessage.error, #fieldEditMessage.error {
+#adminMessage.error, #fieldManageMessage.error, #fieldEditMessage.error, #logsModalMessage.error {
     color: var(--error-color);
     background-color: rgba(255, 77, 79, 0.1);
     border: 1px solid var(--error-color);
 }
-#adminMessage.success, #fieldManageMessage.success, #fieldEditMessage.success {
+#adminMessage.success, #fieldManageMessage.success, #fieldEditMessage.success, #logsModalMessage.success {
     color: #4CAF50;
     background-color: rgba(76, 175, 80, 0.1);
     border: 1px solid #4CAF50;
+}
+
+/* Styles spécifiques à la modale des logs */
+.log-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.log-controls .input-group {
+    margin-bottom: 0; /* Pas de marge en bas dans les contrôles */
+    flex-grow: 1; /* Permet de s'étirer */
+    min-width: 150px; /* Largeur min pour les groupes d'input */
+}
+.log-lines-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.log-lines-group input[type="number"] {
+    width: 80px; /* Largeur fixe pour l'input nombre de lignes */
+    padding: 10px; /* Ajuster padding */
+    padding-left: 15px; /* Pas d'icône pour l'input nombre */
+}
+.log-lines-group .fa-list-ol { /* Icône devant le nombre de lignes */
+    left: -20px; /* Déplacer l'icône à l'extérieur de l'input pour cet alignement */
+    position: relative; /* Ajuster positionnement pour qu'elle ne bouge pas */
+}
+.log-lines-label {
+    color: var(--secondary-color);
+    font-size: 0.9em;
+}
+.log-controls .action-button {
+    flex-shrink: 0; /* Empêche le bouton de rafraîchissement de rétrécir */
+}
+
+.log-content-area {
+    background-color: #000; /* Fond noir pour les logs */
+    color: #0f0; /* Texte vert pour les logs (classique) */
+    font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
+    font-size: 0.85em;
+    padding: 15px;
+    border-radius: 8px;
+    overflow: auto; /* Permet le défilement du contenu des logs */
+    flex-grow: 1; /* Prend l'espace restant dans la modale */
+    text-align: left;
+    white-space: pre-wrap; /* Maintient les sauts de ligne et le formatage */
+    border: 1px solid #333;
+}
+.log-content-area pre {
+    margin: 0;
+    padding: 0;
 }
 
 
@@ -334,8 +436,9 @@
     .admin-actions-grid {
         grid-template-columns: 1fr;
     }
-    #manageFieldsModal .modal-content, #fieldEditModal .modal-content {
+    #manageFieldsModal .modal-content, #fieldEditModal .modal-content, #logsModal .modal-content {
         max-width: 95%;
+        height: auto; /* La hauteur redevient automatique sur mobile */
     }
     .field-item {
         flex-direction: column;
@@ -345,5 +448,22 @@
     .field-item-actions {
         width: 100%;
         justify-content: flex-end;
+    }
+    .checkbox-container {
+        padding-left: 30px;
+    }
+    .checkbox-container .checkmark {
+        top: 0;
+        left: 0;
+    }
+    .log-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .log-controls .input-group {
+        min-width: 100%;
+    }
+    .log-lines-group input[type="number"] {
+        width: 100px; /* Fixe la largeur sur mobile si besoin */
     }
 }
